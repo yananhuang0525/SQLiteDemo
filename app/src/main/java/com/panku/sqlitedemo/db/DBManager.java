@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,16 @@ public class DBManager {
      * @param order
      */
     public void add(OrderInfo order) {
-        ContentValues values = new ContentValues();
-        values.put("code", order.getCode());
-        values.put("username", order.getUsername());
-        values.put("state", order.getState());
-        database.insert("pay_order", null, values);
+        if (query(order.getCode()) == null) {
+            ContentValues values = new ContentValues();
+            values.put("code", order.getCode());
+            values.put("username", order.getUsername());
+            values.put("state", order.getState());
+            database.insert("pay_order", null, values);
+        } else {
+            Log.e("HYN", "订单已存在，已更新");
+            update(order);
+        }
     }
 
     /**
@@ -57,7 +63,9 @@ public class DBManager {
      * @param code
      */
     public void delete(String code) {
-        database.delete("pay_order", "code=?", new String[]{code});
+        int result = -1;//0失败1成功
+        result = database.delete("pay_order", "code=?", new String[]{code});
+        Log.e("HYN", "删除结果" + result);
     }
 
     /**

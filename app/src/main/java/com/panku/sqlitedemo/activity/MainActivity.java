@@ -52,19 +52,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         order.setState(et_state.getText().toString());
         switch (v.getId()) {
             case R.id.btn_add:
-                manager.add(order);
+                if (order.getCode().length() > 0)
+                    manager.add(order);
                 break;
             case R.id.btn_update:
-                manager.update(order);
+                if (order.getCode().length() > 0)
+                    manager.update(order);
                 break;
             case R.id.btn_delete:
-                manager.delete(order.getCode());
+                if (order.getCode().length() > 0)
+                    manager.delete(order.getCode());
                 break;
             case R.id.btn_query:
                 tv_result.setText(JSON.toJSONString(manager.query()));
                 break;
             case R.id.btn_one:
-                tv_result.setText(JSON.toJSONString(manager.query(order.getCode())));
+                if (order.getCode().length() > 0)
+                    tv_result.setText(JSON.toJSONString(manager.query(order.getCode())));
                 break;
         }
     }
